@@ -136,7 +136,9 @@ LaunchDecision LaunchController::decideLaunchMode()
     }
 
     if (m_accountToUse->accountType() == AccountType::Offline) {
-        m_actualLaunchMode = LaunchMode::Offline;
+        // Offline accounts need no ownership check. Use normal mode so missing game files still get downloaded,
+        // unless the user explicitly asked for an offline launch.
+        m_actualLaunchMode = m_wantedLaunchMode == LaunchMode::Offline ? LaunchMode::Offline : LaunchMode::Normal;
         return LaunchDecision::Continue;
     }
 
